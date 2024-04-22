@@ -1,0 +1,109 @@
+---
+title: Graduation Plan
+date: '2022-08-31'
+slug: r-file-paths
+raw: "https://raw.githubusercontent.com/rbind/blogdown-demo/master/content/post/2022-08-31-graduation-plan.Rmd"
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+---
+
+# OH
+Dayton - Cincinnati
+Akron - Cleveland
+
+# KY
+
+## Louisville
+
+## Frankfurt - Lexington
+
+
+# IN
+
+## Indianapolis
+
+
+# IL
+
+## Chicago
+
+
+# IO
+
+## Des Moines
+
+
+# MN
+
+## Minneapolis
+
+
+# TN
+
+## Nashville
+
+
+# GA
+
+## Atlanta
+
+## Savannah
+
+
+# TX
+
+## Houston
+
+## San Antonio
+
+## Austin
+
+## Dallas
+
+## Fort Worth
+
+
+# FL
+
+## Orlando
+
+## Miami
+
+
+# AZ
+
+## Phoenix
+
+## Tucson
+
+
+# CO
+
+## Denver
+
+
+# UT
+
+## Salt Lake City
+
+
+# ID
+
+## Boise
+
+
+# NV
+
+## Las Vegas
+
+
+# OR
+
+## Portland
+
+
+# WA
+
+## Seattle
