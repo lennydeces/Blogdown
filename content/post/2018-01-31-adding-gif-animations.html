@@ -1,0 +1,65 @@
+---
+title: Adding GIF animations
+author: Alison Presmanes Hill
+date: '2018-01-31'
+slug: gif-animations
+categories: []
+tags: []
+raw: "https://raw.githubusercontent.com/rbind/blogdown-demo/master/content/post/2018-01-31-adding-gif-animations.Rmd"
+---
+
+
+
+<p>This post will show you how to include GIFs in a <strong>blogdown</strong> post from a website, and how to make new GIFs from R plots (base R and <strong>ggplot2</strong>) using <strong>knitr</strong> chunk options.</p>
+<div id="embed-gifs-from-a-link" class="section level1">
+<h1>Embed GIFs from a link</h1>
+<p>You can add a link to any GIF online, from sites like <a href="https://giphy.com/">giphy</a>, using markdown syntax in either .md or .Rmd posts. For example, to embed this GIF:</p>
+<div class="figure">
+<img src="https://media.giphy.com/media/xUOxf7XfmpxuSode1O/giphy.gif" />
+
+</div>
+<p>You would find the GIF <a href="https://giphy.com/gifs/broadcity-comedy-central-season-4-xUOxf7XfmpxuSode1O">online</a>, then click on “Copy Link”, and select the “GIF Link” to copy:</p>
+<div class="figure">
+<img src="/images/giphy-gif-link.png" />
+
+</div>
+<p>Then use markdown to refer to that link in the plain text of your post (not an R code chunk):</p>
+<pre><code>![](https://media.giphy.com/media/xUOxf7XfmpxuSode1O/giphy.gif)</code></pre>
+</div>
+<div id="embed-plot-gifs-using-r" class="section level1">
+<h1>Embed plot GIFs using R</h1>
+<p>To create a GIF animation of a plot made in R, you need to install <a href="https://www.ffmpeg.org/download.html">FFmpeg</a> on your computer. If you are on a macOS, you can install FFmpeg through <a href="https://brew.sh">Homebrew</a> using the formula <a href="http://brewformulas.org/Ffmpeg"><code>brew install ffmpeg</code></a>.</p>
+<p>You can make a GIF animation using <strong>knitr</strong> starting in <a href="https://github.com/yihui/knitr/blob/master/NEWS.md">version 1.15</a>. A GIF animation of the plots in a code chunk will be generated for HTML output when you use the chunk options <code>fig.show = 'animate'</code>, <code>ffmpeg.format = 'gif'</code>, and <code>dev = 'jpeg'</code>.</p>
+<p>Here is an example <strong>knitr</strong> chunk with options:</p>
+<pre class="markdown"><code>```{r chunk-label, fig.show=&#39;animate&#39;, ffmpeg.format=&#39;gif&#39;, dev=&#39;jpeg&#39;}
+for (i in 1:10) plot(runif(100), ylim = c(0, 1)) # for example
+```</code></pre>
+<p>Which would produce the GIF below…</p>
+<p><img src="/post/2018-01-31-adding-gif-animations_files/figure-html/random.gif" width="672" /></p>
+<p>Let’s break those chunk options down:</p>
+<ul>
+<li><p><a href="https://yihui.name/knitr/options/#plots"><code>fig.show = 'animate'</code></a>: how to show/arrange the plots; <code>animate</code> wraps all plots into an animation if there are mutiple plots in a chunk</p></li>
+<li><p><a href="https://yihui.name/knitr/options/#animation"><code>ffmpeg.format = 'gif'</code></a>: the filename of the extension video you want to create. This <code>.gif</code> file is also saved in your <code>/static/post/</code> <a href="https://github.com/rbind/blogdown-demo/tree/master/static/post/2018-01-31-adding-gif-animations_files/figure-html">directory</a>.</p></li>
+<li><p><a href="https://yihui.name/knitr/options/#plots"><code>dev = 'jpeg'</code></a>: the function name which will be used as a graphical device to record the individual plots that make up the above. These <code>.jpeg</code> files are each saved in your <code>/static/post/</code> <a href="https://github.com/rbind/blogdown-demo/tree/master/static/post/2018-01-31-adding-gif-animations_files/figure-html">directory</a>.</p></li>
+</ul>
+<p>You can also create GIFs using the <a href="http://purrr.tidyverse.org"><strong>purrr</strong></a> and <a href="http://ggplot2.tidyverse.org/index.html"><strong>ggplot2</strong></a> packages.</p>
+<pre class="r"><code>library(purrr)
+library(ggplot2)
+library(repurrrsive) # for the example data below</code></pre>
+<p>Below is some sample code from an awesome <a href="https://github.com/cwickham/purrr-tutorial"><strong>purrr</strong> tutorial</a> by <a href="http://cwick.co.nz">Charlotte Wickham</a>. From her <code>map2()</code> <a href="https://github.com/cwickham/purrr-tutorial/blob/master/04-map2.R">example code</a>:</p>
+<pre class="r"><code>gap_split_small &lt;- gap_split[1:10]
+countries &lt;- names(gap_split_small)
+# For all countries
+plots &lt;- map2(gap_split_small, countries, 
+  ~ ggplot(.x, aes(year, lifeExp)) + 
+      geom_line() +
+      labs(title = .y) +
+      coord_cartesian(ylim = c(0, 100))) </code></pre>
+<p>To show these plots as an animation, we would use this code chunk:</p>
+<pre class="markdown"><code>```{r gapgif, fig.show=&#39;animate&#39;, ffmpeg.format=&#39;gif&#39;, dev=&#39;jpeg&#39;}
+# Display all plots
+walk(plots, print)
+```</code></pre>
+<p>Which produces the GIF below…</p>
+<p><img src="/post/2018-01-31-adding-gif-animations_files/figure-html/gapgif.gif" width="672" /></p>
+</div>

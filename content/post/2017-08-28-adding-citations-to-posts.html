@@ -1,0 +1,105 @@
+---
+title: Adding citations to posts
+author: Alison Presmanes Hill
+raw: "https://raw.githubusercontent.com/rbind/blogdown-demo/master/content/post/2017-08-28-adding-citations-to-posts.Rmd"
+date: '2017-08-28'
+slug: adding-citations-to-posts
+bibliography: [../../static/bib/scholar.bib, ../../static/bib/packages.bib]
+link-citations: true
+nocite: | 
+  @R-bookdown
+---
+
+
+
+<p>With <strong>blogdown</strong>, you are able to take advantage of several features of Pandoc’s Markdown, including adding citations. You can read more about adding citations in the <strong>bookdown</strong> book <a href="https://bookdown.org/yihui/bookdown/citations.html">here</a>.</p>
+<p>This post will demonstrate how you can add citations. There are 3 steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Save a BibTeX file(s) in the <code>/content/post/</code> directory. The file should be a plain-text file that contains citations that generally look like this:</p>
+<pre class="r"><code>@ARTICLE{key,
+required_fields [, optional_fields] }</code></pre></li>
+<li><p>Reference the BibTeX file(s) in the YAML header of your post:</p>
+<pre class="yaml"><code>---
+bibliography: [one.bib, another.bib, yet-another.bib]
+---</code></pre></li>
+<li><p>In the text of your post, reference items in BibTeX file(s) using <code>@key</code></p></li>
+</ol>
+<div id="example-1-adding-citations-for-books-or-articles" class="section level1">
+<h1>Example 1: Adding citations for books or articles</h1>
+<p>There are several ways to export citations for books or articles as a BibTeX file. One simple way is to use <a href="https://scholar.google.com">Google Scholar</a> to obtain a BibTeX entry. For example, if you search for “Bookdown: Authoring Books and Technical Documents with R Markdown”, you can view the citation by clicking on the quote icon underneath the entry:</p>
+<div class="figure">
+<img src="/images/google-scholar-bibtex.png" />
+
+</div>
+<p>If you then click on the BibTeX link, you will see the formatted plain text version, which you can download as a file with the .bib extension:</p>
+<pre><code>@book{xie2016bookdown,
+  title={Bookdown: Authoring Books and Technical Documents with R Markdown},
+  author={Xie, Yihui},
+  year={2016},
+  publisher={CRC Press}
+}</code></pre>
+<p>To now cite this item in the text of your post, use the format <code>@key</code>, so <code>@xie2016bookdown</code> generates: <span class="citation">Xie (<a href="#ref-xie2016bookdown">2016</a>)</span>. Notice that you can click on the year to see the full reference. In order to do this, add this to your YAML front matter:</p>
+<pre class="yaml"><code>---
+link-citations: true
+---</code></pre>
+</div>
+<div id="example-2-adding-cites-for-r-packages-using-knitr" class="section level1">
+<h1>Example 2: Adding cites for R packages using <strong>knitr</strong></h1>
+<p>There is a helper function <code>write_bib()</code> in the <strong>knitr</strong> package to generate BibTeX entries automatically for R packages. You can use this method to add citations in R Markdown posts in <strong>blogdown</strong>. The difference is that instead of saving your BibTeX file(s), the <code>write_bib</code> function will create a BibTeX file for you. If you don’t specify a file location, <code>knitr::write_bib</code> will create the file in the <code>/content/post/</code> directory.</p>
+<pre class="r"><code># list specific packages
+knitr::write_bib(c(&quot;package1&quot;, &quot;package2&quot;), &quot;packages.bib&quot;)</code></pre>
+<pre class="r"><code># or include all used in the post
+knitr::write_bib(.packages(), &quot;packages.bib&quot;) </code></pre>
+<pre class="r"><code># include all used and specify different location
+knitr::write_bib(.packages(), &quot;../../static/bib/packages.bib&quot;) </code></pre>
+<p>Add this new BibTeX file (<code>&lt;file-name-here&gt;.bib</code>) to your YAML header:</p>
+<pre class="yaml"><code>---
+bibliography: [packages.bib] 
+---</code></pre>
+<p>If you save your BibTeX file(s) to another directory, say in a folder you create like <code>/static/bib/</code>, you would update your YAML header with the correct file path (<em>not</em> in quotes):</p>
+<pre class="yaml"><code>---
+bibliography: [../../static/bib/packages.bib] 
+---</code></pre>
+<p>In the text of your post, reference items in the <strong>knitr</strong>-generated BibTeX file using <code>@R-packagename</code>. For example, in this post, we used several R packages including <strong>blogdown</strong> <span class="citation">(Xie <a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>)</span> and <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-R-knitr">2018</a>)</span>.</p>
+<p>From RStudio’s section on <a href="http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html#citations">citations</a>, the following markdown text:</p>
+<pre><code>1. Blah blah [see @R-blogdown, pp. 33-35; also @R-knitr, ch. 1].
+
+2. Blah blah [@R-blogdown, pp. 33-35].
+
+3. Blah blah [@R-blogdown; @R-knitr].
+
+4. Yihui says blah [-@R-blogdown].
+
+5. @R-blogdown says blah.</code></pre>
+<p>Generates these in-text citation styles:</p>
+<ol style="list-style-type: decimal">
+<li><p>Blah blah <span class="citation">(see Xie <a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>, 33–35; also Xie <a href="#ref-R-knitr">2018</a>, ch. 1)</span>.</p></li>
+<li><p>Blah blah <span class="citation">(Xie <a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>, 33–35)</span>.</p></li>
+<li><p>Blah blah <span class="citation">(Xie <a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>; Xie <a href="#ref-R-knitr">2018</a>)</span>.</p></li>
+<li><p>Yihui says blah <span class="citation">(<a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>)</span>.</p></li>
+<li><p><span class="citation">Xie (<a href="#ref-R-blogdown">2017</a><a href="#ref-R-blogdown">a</a>)</span> says blah.</p></li>
+</ol>
+<p>Finally, let’s say I want to include a reference to the <strong>bookdown</strong> package without an in-text citation. To do this, we would include this package in our packages.bib file generated from <code>knitr::write_bib()</code> and referenceed in the YAML header in the post. Then add this to the YAML header:</p>
+<pre class="yaml"><code>---
+nocite: | 
+  @R-bookdown
+---</code></pre>
+<p>Now you should see the <strong>bookdown</strong> package reference listed below.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-xie2016bookdown">
+<p>Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. CRC Press.</p>
+</div>
+<div id="ref-R-blogdown">
+<p>———. 2017a. <em>Blogdown: Create Blogs and Websites with R Markdown</em>. <a href="https://CRAN.R-project.org/package=blogdown" class="uri">https://CRAN.R-project.org/package=blogdown</a>.</p>
+</div>
+<div id="ref-R-bookdown">
+<p>———. 2017b. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://github.com/rstudio/bookdown" class="uri">https://github.com/rstudio/bookdown</a>.</p>
+</div>
+<div id="ref-R-knitr">
+<p>———. 2018. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr" class="uri">https://CRAN.R-project.org/package=knitr</a>.</p>
+</div>
+</div>
+</div>
